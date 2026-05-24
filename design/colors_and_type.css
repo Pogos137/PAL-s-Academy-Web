@@ -1,0 +1,200 @@
+/* ============================================================
+   PAL's Academy — Design Tokens
+   Colors, typography, spacing, radii, shadows
+   ============================================================ */
+
+/* Fonts loaded via Google Fonts (substitution noted in README) */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ---------- Color ramp: primary (deep academic teal) ---------- */
+  --teal-50:  #EEF5F2;
+  --teal-100: #D6E7E0;
+  --teal-200: #A9CDC1;
+  --teal-300: #6FA897;
+  --teal-400: #3F8472;
+  --teal-500: #1D6655;   /* hover / lighter primary */
+  --teal-600: #114E40;   /* PRIMARY brand color */
+  --teal-700: #0B3D32;
+  --teal-800: #082E26;
+  --teal-900: #051F1A;
+
+  /* ---------- Accent: warm gold ---------- */
+  --gold-50:  #FBF6E8;
+  --gold-100: #F5E9C2;
+  --gold-200: #EBD389;
+  --gold-300: #DDB94C;
+  --gold-400: #C99A2A;   /* ACCENT — achievement, highlights */
+  --gold-500: #A77E1F;
+  --gold-600: #7E5F15;
+
+  /* ---------- Neutral ramp (warm) ---------- */
+  --ink-50:  #FAF8F4;    /* off-white page bg */
+  --ink-100: #F2EFE8;
+  --ink-200: #E4DFD3;
+  --ink-300: #C9C2B2;
+  --ink-400: #9A9384;
+  --ink-500: #6E6759;
+  --ink-600: #4D4738;
+  --ink-700: #34302A;
+  --ink-800: #211F1B;
+  --ink-900: #131210;
+
+  /* ---------- Semantic colors ---------- */
+  --color-bg:        var(--ink-50);
+  --color-surface:   #FFFFFF;
+  --color-surface-2: var(--ink-100);
+  --color-elevated:  #FFFFFF;
+
+  --color-fg-1:      var(--ink-900);   /* headings, primary text */
+  --color-fg-2:      var(--ink-700);   /* body */
+  --color-fg-3:      var(--ink-500);   /* secondary / muted */
+  --color-fg-on-dark: #F6F2E8;
+  --color-fg-on-primary: #FFFFFF;
+
+  --color-primary:        var(--teal-600);
+  --color-primary-hover:  var(--teal-500);
+  --color-primary-press:  var(--teal-700);
+  --color-primary-soft:   var(--teal-50);
+
+  --color-accent:         var(--gold-400);
+  --color-accent-hover:   var(--gold-300);
+  --color-accent-soft:    var(--gold-50);
+
+  --color-border:    rgba(19, 18, 16, 0.10);
+  --color-border-strong: rgba(19, 18, 16, 0.18);
+  --color-divider:   rgba(19, 18, 16, 0.06);
+
+  --color-success:   #2E7A55;
+  --color-success-soft: #E4F1EB;
+  --color-warn:      #B3691A;
+  --color-warn-soft: #FAEEDB;
+  --color-danger:    #B0382B;
+  --color-danger-soft: #F7E1DD;
+
+  /* Subject tag colors — friendly but quiet */
+  --tag-math: #2B5F8A;       /* slate blue */
+  --tag-math-soft: #E3ECF4;
+  --tag-science: #5B7A2E;    /* leafy */
+  --tag-science-soft: #ECF1DC;
+  --tag-english: #8A4B2B;    /* terracotta */
+  --tag-english-soft: #F5E5D9;
+  --tag-french: #6A3F8A;     /* plum */
+  --tag-french-soft: #ECDFF2;
+
+  /* ---------- Typography ---------- */
+  --font-sans: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Instrument Serif', 'Times New Roman', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Display & headline — used sparingly for editorial moments */
+  --display-1: 700 64px/1.02 var(--font-sans);
+  --display-1-letter: -0.025em;
+  --display-2: 700 48px/1.06 var(--font-sans);
+  --display-2-letter: -0.022em;
+
+  /* Editorial serif — quotes, hero accents, section taglines */
+  --serif-display: 400 56px/1.05 var(--font-serif);
+  --serif-display-letter: -0.01em;
+  --serif-quote: italic 400 32px/1.25 var(--font-serif);
+
+  /* Headlines */
+  --h1: 700 40px/1.1  var(--font-sans);
+  --h1-letter: -0.02em;
+  --h2: 600 32px/1.15 var(--font-sans);
+  --h2-letter: -0.015em;
+  --h3: 600 24px/1.25 var(--font-sans);
+  --h3-letter: -0.012em;
+  --h4: 600 20px/1.3  var(--font-sans);
+  --h4-letter: -0.008em;
+
+  /* Body */
+  --body-lg: 400 18px/1.55 var(--font-sans);
+  --body:    400 16px/1.55 var(--font-sans);
+  --body-sm: 400 14px/1.5  var(--font-sans);
+  --caption: 500 12px/1.4  var(--font-sans);
+
+  --eyebrow: 600 12px/1.2 var(--font-sans);
+  --eyebrow-letter: 0.12em;
+  --eyebrow-transform: uppercase;
+
+  /* Buttons / labels */
+  --label-lg: 600 16px/1.2 var(--font-sans);
+  --label:    600 14px/1.2 var(--font-sans);
+  --label-sm: 600 12px/1.2 var(--font-sans);
+
+  /* ---------- Spacing scale (4pt base) ---------- */
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* ---------- Corner radii (rounded, friendly) ---------- */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-pill: 999px;
+
+  /* ---------- Shadows (soft, low-contrast) ---------- */
+  --shadow-xs: 0 1px 2px rgba(8, 46, 38, 0.06);
+  --shadow-sm: 0 2px 6px rgba(8, 46, 38, 0.07), 0 1px 2px rgba(8, 46, 38, 0.04);
+  --shadow-md: 0 8px 20px rgba(8, 46, 38, 0.08), 0 2px 6px rgba(8, 46, 38, 0.04);
+  --shadow-lg: 0 20px 40px rgba(8, 46, 38, 0.10), 0 6px 12px rgba(8, 46, 38, 0.04);
+  --shadow-focus: 0 0 0 4px rgba(29, 102, 85, 0.22);
+  --shadow-inner: inset 0 1px 2px rgba(8, 46, 38, 0.06);
+
+  /* ---------- Motion ---------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 360ms;
+
+  /* ---------- Layout ---------- */
+  --container-max: 1200px;
+  --container-pad: 24px;
+}
+
+/* ============================================================
+   Semantic element styles — drop into any page
+   ============================================================ */
+html {
+  background: var(--color-bg);
+  color: var(--color-fg-2);
+  font: var(--body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1 { font: var(--h1); letter-spacing: var(--h1-letter); color: var(--color-fg-1); }
+h2 { font: var(--h2); letter-spacing: var(--h2-letter); color: var(--color-fg-1); }
+h3 { font: var(--h3); letter-spacing: var(--h3-letter); color: var(--color-fg-1); }
+h4 { font: var(--h4); letter-spacing: var(--h4-letter); color: var(--color-fg-1); }
+p  { font: var(--body); color: var(--color-fg-2); text-wrap: pretty; }
+small { font: var(--body-sm); color: var(--color-fg-3); }
+
+code, pre { font-family: var(--font-mono); }
+
+.eyebrow {
+  font: var(--eyebrow);
+  letter-spacing: var(--eyebrow-letter);
+  text-transform: var(--eyebrow-transform);
+  color: var(--color-primary);
+}
+
+.display { font: var(--display-1); letter-spacing: var(--display-1-letter); color: var(--color-fg-1); }
+.display-serif { font: var(--serif-display); letter-spacing: var(--serif-display-letter); color: var(--color-fg-1); }
+.quote-serif { font: var(--serif-quote); color: var(--color-fg-1); }
