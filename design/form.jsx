@@ -41,6 +41,29 @@ function ConsultForm() {
   const [submitted, setSubmitted] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
 
+  // After the real form POST, Formsubmit redirects back here with ?submitted=1.
+  // Restore the visitor's details from sessionStorage so the success screen
+  // can still greet them by name and show the address we'll reply to.
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("submitted") !== "1") return;
+    try {
+      const raw = sessionStorage.getItem("pals_consult");
+      if (raw) {
+        const d = JSON.parse(raw);
+        if (d.studentName) setStudentName(d.studentName);
+        if (d.email) setEmail(d.email);
+        if (d.phone) setPhone(d.phone);
+        if (d.contactPref) setContactPref(d.contactPref);
+        sessionStorage.removeItem("pals_consult");
+      }
+    } catch (_) { /* ignore */ }
+    setSubmitted(true);
+    const url = new URL(window.location.href);
+    url.searchParams.delete("submitted");
+    window.history.replaceState({}, "", url.toString());
+  }, []);
+
   const toggleSubject = (s) => {
     setSubjects((cur) =>
       cur.includes(s) ? cur.filter((x) => x !== s) : [...cur, s]
@@ -87,10 +110,33 @@ function ConsultForm() {
       return (level === "UNI" ? "University: " : "High school: ") + name;
     });
 
-    const payload = {
-      _subject: `New consultation request — ${studentName}`,
+    // Stash entered data so we can re-show it on the success screen
+    // after Formsubmit redirects us back.
+    try {
+      sessionStorage.setItem(
+        "pals_consult",
+        JSON.stringify({ studentName, email, phone, contactPref })
+      );
+    } catch (_) { /* ignore */ }
+
+    // Build a real hidden form and submit it. A native POST avoids the
+    // CORS issues that block fetch() to formsubmit.co from GitHub Pages,
+    // and it works on the very first submission (no email pre-activation
+    // needed for the form to send — the visitor's data is captured
+    // regardless).
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "https://formsubmit.co/palseduacademy@gmail.com";
+    form.style.display = "none";
+
+    const nextUrl =
+      window.location.origin + window.location.pathname + "?submitted=1";
+    const fields = {
+      _subject: "New consultation request — " + studentName,
       _template: "table",
       _captcha: "false",
+      _next: nextUrl,
+      _honey: "",
       "Student name": studentName,
       "Grade or year": grade,
       "Subjects requested": cleanSubjects.join("\n") || "(none selected)",
@@ -98,31 +144,15 @@ function ConsultForm() {
       "Email": email,
       "Phone": phone || "(not provided)",
     };
-
-    fetch("https://formsubmit.co/ajax/palseduacademy@gmail.com", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      },
-      body: JSON.stringify(payload),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Request failed");
-        return res.json();
-      })
-      .then(() => {
-        setSubmitting(false);
-        setSubmitted(true);
-      })
-      .catch(() => {
-        setSubmitting(false);
-        setErrors((er) => ({
-          ...er,
-          submit:
-            "We couldn't send your request automatically. Please email palseduacademy@gmail.com directly and we'll get back to you within 1–2 business days.",
-        }));
-      });
+    for (const [name, value] of Object.entries(fields)) {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
+    }
+    document.body.appendChild(form);
+    form.submit();
   };
 
   if (submitted) {
@@ -372,15 +402,13 @@ function ConsultForm() {
               </>
             )}
           </button>
-          {errors.submit && (
-            <div className="submit-error" role="alert">
-              <Icon name="alert-triangle" size={16} />
-              <span>{errors.submit}</span>
-            </div>
-          )}
           <div className="submit-note">
             <Icon name="lock" size={14} />
             We'll reach out within 1–2 business days. Your info stays private. No spam, no auto-enrollment.
+          </div>
+          <div className="submit-alt">
+            Trouble with the form? Email{" "}
+            <a href="mailto:palseduacademy@gmail.com">palseduacademy@gmail.com</a> directly.
           </div>
         </div>
       </div>
