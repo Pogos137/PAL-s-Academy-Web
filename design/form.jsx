@@ -129,12 +129,13 @@ function ConsultForm() {
           throw new Error((data && data.message) || "Submission failed");
         }
       })
-      .catch(() => {
+      .catch((err) => {
         setSubmitting(false);
         setErrors((er) => ({
           ...er,
           submit:
-            "We couldn't send your request right now. Please email palseduacademy@gmail.com directly and we'll get back to you within 1–2 business days.",
+            "We couldn't send your request right now. Please email palseduacademy@gmail.com directly and we'll get back to you within 1–2 business days." +
+            (err && err.message ? " (Detail: " + err.message + ")" : ""),
         }));
       });
   };
