@@ -564,6 +564,18 @@ select.input {
   text-align: center;
 }
 .submit-note svg { color: var(--color-primary); }
+.submit-error {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: #fdecec;
+  border: 1px solid #c53030;
+  border-radius: var(--radius-md);
+  color: #c53030;
+  font: var(--body-sm);
+  line-height: 1.5;
+}
+.submit-error svg { color: #c53030; flex-shrink: 0; margin-top: 2px; }
 .submit-alt {
   margin-top: 8px;
   text-align: center;
@@ -581,25 +593,14 @@ select.input {
 .success__badge {
   display: inline-flex; align-items: center; justify-content: center;
   width: 64px; height: 64px; border-radius: 999px;
-  background: var(--color-primary-soft);
-  color: var(--color-primary);
+  background: var(--color-success-soft);
+  color: var(--color-success);
   margin-bottom: 18px;
   animation: pop var(--dur-slow) var(--ease-out);
 }
 .success h3 { margin: 0 0 8px; font: var(--h3); }
 .success h3 em { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--color-primary); }
 .success p { margin: 0 auto; color: var(--color-fg-2); max-width: 460px; }
-.success__mailto-link {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 14px;
-  padding: 10px 16px;
-  background: var(--color-primary);
-  color: #fff;
-  border-radius: var(--radius-md);
-  font: 600 14px/1 var(--font-sans);
-  text-decoration: none;
-}
-.success__mailto-link:hover { background: var(--teal-700); }
 .success__what-next {
   margin-top: 24px;
   padding: 18px;

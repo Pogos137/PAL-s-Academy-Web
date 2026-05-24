@@ -2,6 +2,19 @@
 // PAL's Academy — Consultation form (interactive)
 // ============================================================
 
+// ---- WEB3FORMS SETUP ----------------------------------------
+// Submissions are delivered straight to palseduacademy@gmail.com via
+// Web3Forms (free, 250/month, no account needed).
+//
+// To get the access key:
+//   1. Visit https://web3forms.com/
+//   2. Scroll to "Create your Access Key"
+//   3. Enter palseduacademy@gmail.com
+//   4. Click "Create Access Key" — the key appears on screen
+//   5. Paste the key below, replacing the placeholder string
+// -------------------------------------------------------------
+const WEB3FORMS_ACCESS_KEY = "PASTE_YOUR_WEB3FORMS_ACCESS_KEY_HERE";
+
 const HS_SUBJECTS = [
   { name: "Functions", code: "MCR3U" },
   { name: "Advanced Functions", code: "MHF4U" },
@@ -40,7 +53,6 @@ function ConsultForm() {
   const [errors, setErrors] = React.useState({});
   const [submitted, setSubmitted] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
-  const [mailtoUrl, setMailtoUrl] = React.useState("");
 
   const toggleSubject = (s) => {
     setSubjects((cur) =>
@@ -87,33 +99,44 @@ function ConsultForm() {
       return (level === "UNI" ? "University: " : "High school: ") + name;
     });
 
-    const mailSubject = "New consultation request — " + studentName;
-    const mailBody = [
-      "=== PAL's Academy — New Consultation Request ===",
-      "",
-      "Student name:   " + studentName,
-      "Grade / year:   " + grade,
-      "Subjects:       " + (cleanSubjects.join(", ") || "—"),
-      "Contact method: " + (contactPref === "phone" ? "Phone" : "Email"),
-      "Email:          " + email,
-      "Phone:          " + (phone || "Not provided"),
-      "",
-      "Reply to this email to reach the family.",
-    ].join("\r\n");
+    const payload = {
+      access_key: WEB3FORMS_ACCESS_KEY,
+      subject: "New consultation request — " + studentName,
+      from_name: "PAL's Academy website",
+      replyto: email,
+      "Student name": studentName,
+      "Grade or year": grade,
+      "Subjects requested": cleanSubjects.join("\n") || "(none selected)",
+      "Preferred contact method": contactPref === "phone" ? "Phone" : "Email",
+      "Email": email,
+      "Phone": phone || "(not provided)",
+    };
 
-    const url =
-      "mailto:palseduacademy@gmail.com" +
-      "?subject=" + encodeURIComponent(mailSubject) +
-      "&body=" + encodeURIComponent(mailBody);
-
-    setMailtoUrl(url);
-    setSubmitting(false);
-    setSubmitted(true);
-
-    // Open the visitor's email client with the request pre-filled.
-    // window.location.href with a mailto: never navigates the page away —
-    // it just hands control to the OS mail handler.
-    setTimeout(() => { window.location.href = url; }, 120);
+    fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.success) {
+          setSubmitting(false);
+          setSubmitted(true);
+        } else {
+          throw new Error((data && data.message) || "Submission failed");
+        }
+      })
+      .catch(() => {
+        setSubmitting(false);
+        setErrors((er) => ({
+          ...er,
+          submit:
+            "We couldn't send your request right now. Please email palseduacademy@gmail.com directly and we'll get back to you within 1–2 business days.",
+        }));
+      });
   };
 
   if (submitted) {
@@ -121,28 +144,23 @@ function ConsultForm() {
       <div className="consult__card">
         <div className="success">
           <div className="success__badge">
-            <Icon name="mail" size={32} strokeWidth={2} />
+            <Icon name="check" size={32} strokeWidth={2.5} />
           </div>
           <h3>
-            One last step, {studentName.split(" ")[0] || "there"}!
+            Thanks, {studentName.split(" ")[0] || "there"} — <em>we're on it.</em>
           </h3>
           <p>
-            Your email app should have opened with your request ready to go.
-            Hit <strong>Send</strong> and we'll be in touch within 1–2
-            business days
+            We've got your request. A member of the team will be in touch within
+            1–2 business days
             {contactPref === "phone" ? (
               <> by phone at <strong>{phone}</strong></>
             ) : (
-              <> at <strong>{email}</strong></>
+              <> by email at <strong>{email}</strong></>
             )}
             .
           </p>
-          <a className="success__mailto-link" href={mailtoUrl}>
-            <Icon name="mail" size={15} />
-            Email didn't open? Click here to try again.
-          </a>
           <div className="success__what-next">
-            <h4>What happens after you send</h4>
+            <h4>What happens next</h4>
             <ul>
               <li>We'll review the subjects you flagged and shortlist tutors.</li>
               <li>A 15-min call to confirm goals, schedule, and the right format.</li>
@@ -368,13 +386,19 @@ function ConsultForm() {
               </>
             )}
           </button>
+          {errors.submit && (
+            <div className="submit-error" role="alert">
+              <Icon name="alert-triangle" size={16} />
+              <span>{errors.submit}</span>
+            </div>
+          )}
           <div className="submit-note">
             <Icon name="lock" size={14} />
             We'll reach out within 1–2 business days. Your info stays private. No spam, no auto-enrollment.
           </div>
           <div className="submit-alt">
-            Trouble with the form? Email{" "}
-            <a href="mailto:palseduacademy@gmail.com">palseduacademy@gmail.com</a> directly.
+            Prefer email? Reach us at{" "}
+            <a href="mailto:palseduacademy@gmail.com">palseduacademy@gmail.com</a>.
           </div>
         </div>
       </div>
