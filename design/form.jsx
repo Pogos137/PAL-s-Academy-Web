@@ -13,7 +13,7 @@
 //   4. Click "Create Access Key" — the key appears on screen
 //   5. Paste the key below, replacing the placeholder string
 // -------------------------------------------------------------
-const WEB3FORMS_ACCESS_KEY = "PASTE_YOUR_WEB3FORMS_ACCESS_KEY_HERE";
+const WEB3FORMS_ACCESS_KEY = "d5f4e338-c2d8-48a6-881a-ca80b043a663";
 
 const HS_SUBJECTS = [
   { name: "Functions", code: "MCR3U" },
