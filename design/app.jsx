@@ -36,7 +36,6 @@ function App() {
         <Hero onCTA={scrollToConsult} />
         <StatsBar />
         <HowItWorks />
-        <Subjects />
         <TutorTeaser />
         <WhyUs />
         <ConsultSection />

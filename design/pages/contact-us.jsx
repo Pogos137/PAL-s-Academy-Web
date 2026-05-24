@@ -48,7 +48,7 @@ function ContactUsPage() {
                     <FacebookIcon size={18} />
                     <div>
                       <div className="contact-info__label">Follow along</div>
-                      <a href="https://www.facebook.com/palsacademy" target="_blank" rel="noopener noreferrer">Facebook</a>
+                      <a href="https://www.facebook.com/profile.php?id=61589193897066" target="_blank" rel="noopener noreferrer">Facebook</a>
                     </div>
                   </li>
                 </ul>

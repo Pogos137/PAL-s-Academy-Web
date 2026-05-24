@@ -80,10 +80,49 @@ function ConsultForm() {
       return;
     }
     setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-      setSubmitted(true);
-    }, 700);
+
+    const cleanSubjects = subjects.map((s) => {
+      const [level, ...rest] = s.split(":");
+      const name = rest.join(":");
+      return (level === "UNI" ? "University: " : "High school: ") + name;
+    });
+
+    const payload = {
+      _subject: `New consultation request — ${studentName}`,
+      _template: "table",
+      _captcha: "false",
+      "Student name": studentName,
+      "Grade or year": grade,
+      "Subjects requested": cleanSubjects.join("\n") || "(none selected)",
+      "Preferred contact method": contactPref === "phone" ? "Phone" : "Email",
+      "Email": email,
+      "Phone": phone || "(not provided)",
+    };
+
+    fetch("https://formsubmit.co/ajax/palseduacademy@gmail.com", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Request failed");
+        return res.json();
+      })
+      .then(() => {
+        setSubmitting(false);
+        setSubmitted(true);
+      })
+      .catch(() => {
+        setSubmitting(false);
+        setErrors((er) => ({
+          ...er,
+          submit:
+            "We couldn't send your request automatically. Please email palseduacademy@gmail.com directly and we'll get back to you within 1–2 business days.",
+        }));
+      });
   };
 
   if (submitted) {
@@ -333,6 +372,12 @@ function ConsultForm() {
               </>
             )}
           </button>
+          {errors.submit && (
+            <div className="submit-error" role="alert">
+              <Icon name="alert-triangle" size={16} />
+              <span>{errors.submit}</span>
+            </div>
+          )}
           <div className="submit-note">
             <Icon name="lock" size={14} />
             We'll reach out within 1–2 business days. Your info stays private. No spam, no auto-enrollment.

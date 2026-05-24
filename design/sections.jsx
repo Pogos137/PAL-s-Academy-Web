@@ -14,10 +14,9 @@ function Header({ onCTA, current = "home" }) {
 
   const isHome = current === "home";
   const links = [
-    { id: "home",         label: "Home",         href: isHome ? "#top"      : "PAL's Academy - Landing Page.html" },
+    { id: "home",         label: "Home",         href: isHome ? "#top" : "index.html" },
     { id: "how",          label: "How It Works", href: "How It Works.html" },
-    { id: "subjects",     label: "Subjects",     href: isHome ? "#subjects" : "PAL's Academy - Landing Page.html#subjects" },
-    { id: "tutors",       label: "Our Tutors",   href: "Our Tutors.html" },
+    { id: "subjects",     label: "Subjects",     href: "Subjects.html" },
     { id: "testimonials", label: "Testimonials", href: "Testimonials.html" },
     { id: "contact",      label: "Contact Us",   href: "Contact Us.html" },
   ];
@@ -25,7 +24,7 @@ function Header({ onCTA, current = "home" }) {
   return (
     <header className={"site-header" + (scrolled ? " site-header--scrolled" : "")}>
       <div className="container site-header__inner">
-        <a className="site-header__logo" href="PAL's Academy - Landing Page.html" aria-label="PAL's Academy">
+        <a className="site-header__logo" href="index.html" aria-label="PAL's Academy">
           <img src="design/assets/logo-wordmark.svg" alt="PAL's Academy" />
         </a>
         <span className="site-header__spacer" />
@@ -361,16 +360,10 @@ function TutorTeaser() {
   return (
     <section className="section section--tutors" id="tutors" data-screen-label="Meet our tutors">
       <div className="container">
-        <div className="section-head section-head--with-action">
-          <div>
-            <span className="eyebrow">Meet our tutors</span>
-            <h2>Real students who've been where you are.</h2>
-            <p>Every tutor was the kid acing the course not long ago. They've kept their notes, their tricks, and their patience.</p>
-          </div>
-          <a href="Our Tutors.html" className="section-head__action">
-            How we vet tutors
-            <Icon name="arrow-right" size={16} />
-          </a>
+        <div className="section-head">
+          <span className="eyebrow">Meet our tutors</span>
+          <h2>Real students who've been where you are.</h2>
+          <p>Every tutor was the kid acing the course not long ago. They've kept their notes, their tricks, and their patience.</p>
         </div>
         <div className="why-grid">
           {traits.map((t, i) => (
@@ -556,11 +549,11 @@ function Footer() {
             <img src="design/assets/logo-wordmark-dark.svg" alt="PAL's Academy" />
           </a>
           <div className="site-footer__links">
-            <a href="#how">How it works</a>
-            <a href="#subjects">Subjects</a>
-            <a href="#consult">Get started</a>
+            <a href="How It Works.html">How it works</a>
+            <a href="Subjects.html">Subjects</a>
+            <a href="Contact Us.html">Get started</a>
             <a
-              href="https://www.facebook.com/palsacademy"
+              href="https://www.facebook.com/profile.php?id=61589193897066"
               target="_blank"
               rel="noopener noreferrer"
             >
