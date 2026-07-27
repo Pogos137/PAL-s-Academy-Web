@@ -136,7 +136,69 @@
     /* science */
     S('sci-core',      'Physics & Chemistry Essentials',  'PAL Academy',        'science', 'guide', 'The physical rules everything else obeys.'),
     S('sci-systems',   'Systems, Complexity & Statistics','PAL Academy',        'science', 'guide', 'Feedback, emergence, and reading evidence honestly.'),
-    S('sci-genetics',  'Genetics & Molecular Biology',    'PAL Academy',        'science', 'guide', 'DNA to phenotype, and what heritability really means.')
+    S('sci-genetics',  'Genetics & Molecular Biology',    'PAL Academy',        'science', 'guide', 'DNA to phenotype, and what heritability really means.'),
+
+    /* ---- second wave ---------------------------------------------------- */
+    /* medicine */
+    S('clin-cardio',   'Clinical Cardiology',             'PAL Academy',        'medicine', 'guide', 'Ischaemia, failure, arrhythmia and valves at the bedside.'),
+    S('clin-neuro',    'Clinical Neurology',              'PAL Academy',        'medicine', 'guide', 'Localise the lesion, then name it.'),
+    S('clin-resp',     'Clinical Respiratory Medicine',   'PAL Academy',        'medicine', 'guide', 'Airways, parenchyma, vasculature and the pleural space.'),
+    S('clin-endo',     'Clinical Endocrinology & Diabetes','PAL Academy',       'medicine', 'guide', 'Axes that fail, and the metabolic disease that dominates practice.'),
+    S('clin-msk',      'Rheumatology & MSK Medicine',     'PAL Academy',        'medicine', 'guide', 'Inflammatory versus mechanical, and how to tell fast.'),
+    S('clin-psych',    'Psychiatry Essentials',           'PAL Academy',        'medicine', 'guide', 'Mental illness as medicine, with mechanisms and evidence.'),
+    S('bk-being-mortal','Being Mortal',                   'Atul Gawande',       'medicine', 'book', 'What medicine owes people it cannot cure.'),
+    S('bk-checklist',  'The Checklist Manifesto',         'Atul Gawande',       'medicine', 'book', 'Why competent experts still need a list.'),
+
+    /* anatomy */
+    S('anat-head-neck','Head & Neck Anatomy',             'PAL Academy',        'anatomy', 'guide', 'Triangles, fascial planes, and the paths infection takes.'),
+    S('anat-embryo',   'Embryology',                      'PAL Academy',        'anatomy', 'guide', 'Where adult anatomy comes from — and why it goes wrong.'),
+    S('anat-histo',    'Histology',                       'PAL Academy',        'anatomy', 'guide', 'The four basic tissues and how to read a slide.'),
+
+    /* physiology */
+    S('phys-neuro',    'Neurophysiology',                 'PAL Academy',        'physiology', 'guide', 'Membranes, synapses, reflexes and sensory coding.'),
+    S('phys-blood',    'Blood & Immunophysiology',        'PAL Academy',        'physiology', 'guide', 'Haemostasis, oxygen carriage, and the defence system at work.'),
+
+    /* kinesiology */
+    S('kin-testing',   'Assessment & Testing',            'PAL Academy',        'kinesiology', 'guide', 'Measuring capacity honestly enough to program from it.'),
+    S('kin-endurance', 'Endurance Training Science',      'PAL Academy',        'kinesiology', 'guide', 'Zones, polarisation, and what actually drives aerobic gains.'),
+
+    /* nutrition */
+    S('nut-clinical',  'Clinical Nutrition',              'PAL Academy',        'nutrition', 'guide', 'Malnutrition, refeeding, and nutrition in disease.'),
+
+    /* recovery */
+    S('sleep-clinical','Sleep Disorders',                 'PAL Academy',        'recovery', 'guide', 'Apnoea, insomnia, circadian disorders and what to do about them.'),
+
+    /* learning */
+    S('bk-peak',       'Peak',                            'Ericsson & Pool',    'learning', 'book', 'Deliberate practice, and what expertise actually requires.'),
+
+    /* habits */
+    S('bk-grit',       'Grit',                            'Angela Duckworth',   'habits', 'book', 'Passion and perseverance for long-term goals.'),
+    S('bk-mindset',    'Mindset',                         'Carol Dweck',        'habits', 'book', 'Fixed versus growth beliefs about ability.'),
+    S('bk-4000-weeks', 'Four Thousand Weeks',             'Oliver Burkeman',    'habits', 'book', 'Time management for mortals who cannot do everything.'),
+
+    /* influence */
+    S('bk-pre-suasion','Pre-Suasion',                     'Robert Cialdini',    'influence', 'book', 'The moment before the message does most of the work.'),
+    S('bk-attached',   'Attached',                        'Levine & Heller',    'influence', 'book', 'Attachment styles and why relationships repeat.'),
+
+    /* philosophy */
+    S('bk-obstacle',   'The Obstacle Is the Way',         'Ryan Holiday',       'philosophy', 'book', 'Perception, action and will applied to adversity.'),
+
+    /* thinking */
+    S('bk-black-swan', 'The Black Swan',                  'Nassim Taleb',       'thinking', 'book', 'The outsized role of rare, unpredictable events.'),
+    S('bk-scout',      'The Scout Mindset',               'Julia Galef',        'thinking', 'book', 'Seeing clearly instead of defending a position.'),
+    S('bk-range',      'Range',                           'David Epstein',      'thinking', 'book', 'Why generalists triumph in a specialised world.'),
+
+    /* craft */
+    S('bk-bird',       'Bird by Bird',                    'Anne Lamott',        'craft', 'book', 'Writing, and the permission to be bad first.'),
+
+    /* history */
+    S('bk-emperor',    'The Emperor of All Maladies',     'Siddhartha Mukherjee','history', 'book', 'A biography of cancer and the people who fought it.'),
+    S('bk-henrietta',  'The Immortal Life of Henrietta Lacks', 'Rebecca Skloot','history', 'book', 'HeLa cells, consent, and who medicine is built on.'),
+
+    /* science */
+    S('sci-evolution', 'Evolution & Evolutionary Medicine','PAL Academy',       'science', 'guide', 'Selection, drift, and why bodies are imperfectly designed.'),
+    S('bk-gene',       'The Gene',                        'Siddhartha Mukherjee','science', 'book', 'Heredity from Mendel to CRISPR.'),
+    S('bk-selfish-gene','The Selfish Gene',               'Richard Dawkins',    'science', 'book', 'The gene-centred view of evolution.')
   ];
 
   PAL.sourceMap = {};
@@ -179,18 +241,22 @@
   /* ------------------------------------------------------------------ add() */
   PAL.ideas = [];
 
+  const seq = {};   // per-source counter, so a source can be extended across files
+
   /**
    * Register ideas against a source.
    * Compact authoring shape:
    *   t = title, b = body, k = kind, g = tags[], c = clinical correlate,
-   *   q = recall question, a = answer, m = mnemonic
+   *   q = recall question, a = answer, m = mnemonic,
+   *   r = key into PAL.refs for a specific primary citation
    */
   PAL.add = function (sourceId, items) {
     const src = PAL.sourceMap[sourceId];
     if (!src) { console.warn('[PAL] unknown source:', sourceId); return; }
-    items.forEach((it, i) => {
+    items.forEach(it => {
+      seq[sourceId] = (seq[sourceId] || 0) + 1;
       PAL.ideas.push({
-        id: sourceId + '-' + (i + 1),
+        id: sourceId + '-' + seq[sourceId],
         sourceId: sourceId,
         topic: src.topic,
         title: it.t,
@@ -200,7 +266,8 @@
         clinical: it.c || null,
         q: it.q || null,
         a: it.a || null,
-        mnemonic: it.m || null
+        mnemonic: it.m || null,
+        ref: it.r || null
       });
     });
   };
@@ -210,6 +277,10 @@
     PAL.ideaMap = {};
     PAL.bySource = {};
     PAL.byTopic = {};
+    // attach the reference basis declared in data/references.js
+    PAL.sourceRefs = PAL.sourceRefs || {};
+    PAL.refs = PAL.refs || {};
+    PAL.sources.forEach(s => { s.ref = PAL.sourceRefs[s.id] || null; });
     PAL.ideas.forEach(idea => {
       PAL.ideaMap[idea.id] = idea;
       (PAL.bySource[idea.sourceId] = PAL.bySource[idea.sourceId] || []).push(idea);

@@ -116,6 +116,7 @@
     const s = UI.srcOf(idea);
     const t = UI.topicOf(idea);
     const tags = (idea.tags || []).map(g => `<span class="tag">${esc(g)}</span>`).join(' ');
+    const cite = idea.ref ? PAL.refs[idea.ref] : null;
 
     document.getElementById('reader-body').innerHTML = `<div class="rd">
       <div class="kicker">
@@ -129,7 +130,15 @@
       ${idea.q ? `<div class="mnem" style="background:var(--primary-soft); color:var(--fg-2)">
           <strong>Recall:</strong> ${esc(idea.q.replace(/\{\{(.+?)\}\}/g, '[ … ]'))}</div>` : ''}
       ${tags ? `<div class="card-tags" style="margin-top:20px">${tags}</div>` : ''}
-      ${s ? `<div class="src-note">From <a href="#/source/${s.id}" data-act="close-reader-nav"><strong>${esc(s.title)}</strong></a> — ${esc(s.blurb)}</div>` : ''}
+      ${cite ? `<div class="ref">
+          <b>Primary source</b>
+          <cite>${esc(cite.text)}</cite>
+          <em>${esc(cite.note)}</em>
+          <a href="https://doi.org/${esc(cite.doi)}" target="_blank" rel="noopener noreferrer">doi.org/${esc(cite.doi)}</a>
+          <span class="pmid"> · PMID ${esc(cite.pmid)}</span>
+        </div>` : ''}
+      ${s ? `<div class="src-note">From <a href="#/source/${s.id}" data-act="close-reader-nav"><strong>${esc(s.title)}</strong></a> — ${esc(s.blurb)}
+          ${s.ref ? `<div style="margin-top:8px; color:var(--fg-4); font-size:12.5px">Written from: ${esc(s.ref)}</div>` : ''}</div>` : ''}
     </div>`;
 
     document.getElementById('reader-acts').innerHTML = `

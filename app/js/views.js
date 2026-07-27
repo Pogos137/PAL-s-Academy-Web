@@ -82,6 +82,9 @@
     return {
       html: `<div class="wrap">
         ${pageHead('Explore', PAL.ideas.length + ' ideas across ' + PAL.topics.length + ' realms and ' + PAL.sources.length + ' sources.')}
+        <div class="rowline" style="margin:-14px 0 26px">
+          <a class="btn btn-ghost btn-sm" href="#/refs">${ico('book')}Where this comes from</a>
+        </div>
 
         <section class="sec">
           <div class="sec-head"><h2>Realms</h2></div>
@@ -547,6 +550,62 @@
   };
 
   /* ====================================================================== */
+  /* REFERENCES                                                              */
+  /* ====================================================================== */
+  V.refs = function () {
+    const cited = PAL.ideas.filter(i => i.ref);
+    const byKey = {};
+    cited.forEach(i => { (byKey[i.ref] = byKey[i.ref] || []).push(i); });
+
+    return {
+      html: `<div class="wrap">
+        ${pageHead('References', 'Where all of this comes from. ' + PAL.sources.length +
+          ' sources, each written from a named reference work; specific empirical claims carry a primary citation.')}
+
+        <div class="card" style="margin-bottom:32px">
+          <p style="margin-top:0">Study guides are original explainers written from the standard textbooks and
+          guidelines listed below. Book entries are original summaries of the ideas in those books — not quotations.
+          Where an idea states a specific number or trial result, it carries a <span class="tag tag-ref">cited</span>
+          marker and the paper is named in full, with a DOI link and PubMed ID.</p>
+          <p class="muted" style="margin-bottom:0; font-size:13.5px">Citations below were checked against PubMed.
+          The medical content is a revision aid, not clinical guidance.</p>
+        </div>
+
+        <section class="sec">
+          <div class="sec-head"><h2>Primary citations</h2><span class="muted">${Object.keys(PAL.refs).length} papers · ${cited.length} ideas</span></div>
+          ${Object.keys(PAL.refs).map(k => {
+            const r = PAL.refs[k];
+            const ideas = byKey[k] || [];
+            return `<div class="card" style="margin-bottom:12px">
+              <cite style="display:block; font-weight:600; color:var(--fg-1); font-style:normal">${esc(r.text)}</cite>
+              <p style="margin:6px 0 10px; font-size:13.5px; color:var(--fg-3)">${esc(r.note)}</p>
+              <a class="ref" style="display:inline-block; padding:6px 12px; margin:0; font-family:var(--mono); font-size:12px; color:var(--primary-hi)"
+                 href="https://doi.org/${esc(r.doi)}" target="_blank" rel="noopener noreferrer">doi.org/${esc(r.doi)}</a>
+              <span class="muted" style="font-family:var(--mono); font-size:12px"> · PMID ${esc(r.pmid)}</span>
+              ${ideas.length ? `<div style="margin-top:12px; padding-top:10px; border-top:1px solid var(--divider)">
+                ${ideas.map(i => `<div class="list-item" data-id="${i.id}" data-act="open" style="padding:7px 0; border:none">
+                  <div style="flex:1; min-width:0"><h4>${esc(i.title)}</h4></div></div>`).join('')}
+              </div>` : ''}
+            </div>`;
+          }).join('')}
+        </section>
+
+        <section class="sec">
+          <div class="sec-head"><h2>Reference basis by source</h2><span class="muted">${PAL.sources.length} sources</span></div>
+          ${PAL.topics.map(t => `<div class="card" style="margin-bottom:12px">
+            <h3 style="font-size:16px; margin-bottom:10px">${t.emoji} ${esc(t.name)}</h3>
+            ${t.sources.map(s => `<div style="padding:8px 0; border-top:1px solid var(--divider)">
+              <a href="#/source/${s.id}" style="font-weight:600; color:var(--fg-1); font-size:14.5px">${esc(s.title)}</a>
+              <div class="muted" style="font-size:13px; margin-top:2px">${esc(s.ref || '—')}</div>
+            </div>`).join('')}
+          </div>`).join('')}
+        </section>
+      </div>`,
+      ids: cited.map(i => i.id)
+    };
+  };
+
+  /* ====================================================================== */
   /* SETTINGS                                                                */
   /* ====================================================================== */
   V.settings = function () {
@@ -598,11 +657,12 @@
           <div class="card">
             <p style="margin-top:0"><strong>Stacks</strong> — a private knowledge app built for one reader.
             ${PAL.ideas.length} ideas across ${PAL.topics.length} realms and ${PAL.sources.length} sources.</p>
-            <p class="muted" style="font-size:13.5px; margin-bottom:0">
+            <p class="muted" style="font-size:13.5px">
               Book entries are original summaries of the ideas in those works, written for study — not quotations
               or replacements for reading them. Medical content is a revision aid for someone studying the
               subject; it is not clinical guidance and must not be used to make decisions about a real patient.
             </p>
+            <a class="btn btn-ghost btn-sm" href="#/refs">${ico('book')}Sources &amp; references</a>
           </div>
         </section>
       </div>`

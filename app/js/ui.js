@@ -84,6 +84,7 @@
         <span class="dot"></span>
         <span class="card-src" data-act="open-source">${esc(byline(idea))}</span>
         ${idea.clinical ? '<span class="dot"></span><span class="tag tag-clin">clinical</span>' : ''}
+        ${idea.ref ? '<span class="dot"></span><span class="tag tag-ref">cited</span>' : ''}
       </div>
       <h3 data-act="open">${esc(idea.title)}</h3>
       <p>${esc(idea.body)}</p>

@@ -7,7 +7,7 @@ Weighted heavily towards **medicine, anatomy, physiology and kinesiology**, and 
 with the books that cover everything else — *Atomic Habits*, *The Art of Seduction*,
 *Thinking, Fast and Slow*, *Meditations*, *Sapiens*, and about seventy others.
 
-**624 ideas · 74 sources · 16 realms**
+**928 ideas · 107 sources · 16 realms**
 
 ---
 
@@ -116,7 +116,8 @@ app/js/icons.js         inline SVG set
 app/js/ui.js            shared render helpers
 app/js/views.js         one function per route
 app/js/app.js           router, events, reader overlay, shortcuts
-app/data/*.js           the 624 ideas, grouped by domain
+app/data/references.js  reference basis per source + verified primary citations
+app/data/*.js           the 928 ideas, grouped by domain (*2.js = second wave)
 ```
 
 ### Adding your own content
@@ -132,20 +133,51 @@ PAL.add('phys-cardio', [
     c: "Why it matters clinically.",        // optional — renders as a gold callout
     q: "Cardiac output = {{HR × SV}}.",     // optional — becomes a cloze card
     a: "The full answer.",                  // optional
-    m: "A mnemonic." }                      // optional
+    m: "A mnemonic.",                       // optional
+    r: "morton2018" }                       // optional — key into PAL.refs
 ]);
 ```
+
+`PAL.add` can be called more than once for the same source, so a source can be extended from
+a new file without renumbering anything. To cite a claim, add the paper to `PAL.refs` in
+`app/data/references.js` with its PMID and DOI, then reference the key with `r:`.
 
 New sources go in the `PAL.sources` array in `app/js/library.js`; new realms in `PAL.topics`
 directly above it.
 
 ---
 
-## A note on the content
+## Provenance
 
-Book entries are **original summaries written for study** — the ideas restated in my own
-words, not quotations, and not a substitute for reading the books themselves. If a summary
-sends you to the original, it did its job.
+Every source in the library declares the reference work it was written from — visible at the
+bottom of every idea in the reader, and listed in full under **Explore → Where this comes
+from** (`#/refs`).
+
+Three tiers, and it is worth being precise about which is which:
+
+1. **Study guides** are original explainers written from the standard textbooks and
+   guidelines for that field — Robbins for pathology, Guyton & Hall and West for physiology,
+   Moore and Gray's for anatomy, Neumann and the NSCA for kinesiology, Katzung for
+   pharmacology, Tintinalli and the Resuscitation Council for emergency medicine, and so on.
+   Each source names its own basis.
+2. **Book entries** are original summaries of the ideas in those books. Not quotations, not
+   a substitute for reading them.
+3. **Specific empirical claims** — anything stating a number, a trial result or an effect
+   size — carry a `cited` badge and a full primary citation with a DOI link and PubMed ID.
+
+The 11 primary citations were checked against PubMed rather than recalled, so the figures in
+the app match the papers. They cover the claims most likely to be repeated out loud: the
+1.62 g/kg/day protein breakpoint, the 9-month ACL return-to-sport finding, cardiorespiratory
+fitness and mortality, ultra-processed food and energy intake, 1.9 million neurons per minute
+in stroke, gait speed and survival, the ISSN creatine position stand, sleep restriction and
+glucose tolerance, Nordic hamstring injury reduction, running cadence and joint load, and
+Sackett's definition of evidence-based medicine.
+
+Where a popular book overstates its evidence, the library says so rather than repeating it —
+there are explicit entries on the replication problems behind grit and growth mindset, the
+critique of *Why We Sleep*, the misreading of the 10,000-hour rule, the serotonin hypothesis
+of depression, learning styles, and left-brain/right-brain. Reading a book is not the same as
+believing it.
 
 The medical material is a **revision aid** pitched at someone studying the subject. It is
 not clinical guidance, it is not exhaustive, and it must not be used to make decisions about

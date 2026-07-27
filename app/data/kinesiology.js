@@ -136,7 +136,8 @@ PAL.add('kin-rehab', [
 { t: "Return to sport is criteria-based, not calendar-based",
   b: "Time since surgery is the weakest criterion. Strength symmetry above roughly 90%, hop test symmetry, movement quality under fatigue, and psychological readiness all predict re-injury better. Returning on time alone substantially raises re-rupture risk.",
   g: ["return to sport", "ACL", "criteria"],
-  c: "Each month of delayed return up to about nine months after ACL reconstruction has been associated with reduced re-injury rates." },
+  r: "grindem2016",
+  c: "Each month of delayed return up to about nine months after ACL reconstruction was associated with roughly a 51% reduction in reinjury rate in the Delaware-Oslo cohort." },
 { t: "The strongest predictor of injury is previous injury",
   b: "Across sports, prior injury to the same site is the most consistent risk factor. That is largely because rehab is commonly stopped when pain resolves rather than when capacity is restored — leaving a deficit that the next exposure finds.",
   g: ["risk factor", "recurrence"] },
@@ -149,7 +150,8 @@ PAL.add('kin-rehab', [
 { t: "Load management beats stretching for prevention",
   b: "Evidence for static stretching preventing injury is weak. What does have support: progressive strength training, eccentric hamstring work such as Nordic curls, balance training after ankle sprain, and controlled increases in weekly training load.",
   g: ["prevention", "Nordic", "evidence"],
-  c: "Nordic hamstring protocols have shown large reductions in hamstring injury rates in team sport trials." }
+  r: "vandyk2019",
+  c: "Meta-analysis of team-sport trials found Nordic hamstring programmes roughly halved hamstring injury rates. Adherence, not efficacy, is the practical limitation." }
 ]);
 
 PAL.add('kin-gait', [
@@ -183,9 +185,11 @@ PAL.add('kin-gait', [
   g: ["posture", "evidence"] },
 { t: "Cadence is the most useful running variable to change",
   b: "Increasing step rate by roughly 5–10% reduces vertical oscillation, shortens stride, moves foot contact closer to the centre of mass and reduces load at the knee and hip. It is a single cue that changes many mechanics at once.",
-  g: ["running", "cadence", "load"] },
+  g: ["running", "cadence", "load"],
+  r: "heiderscheit2011" },
 { t: "Gait speed is a vital sign",
   b: "Usual walking speed predicts mortality, hospitalisation and functional decline in older adults about as well as many clinical measures. Below roughly 0.8 m/s marks meaningfully increased risk; below 0.6 m/s marks a high-risk group.",
   g: ["gait speed", "prognosis", "ageing"],
+  r: "studenski2011",
   c: "It takes four metres and a stopwatch — arguably the highest information-per-effort test in geriatric assessment." }
 ]);
