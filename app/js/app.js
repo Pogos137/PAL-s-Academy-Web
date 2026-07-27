@@ -42,10 +42,13 @@
     const fn = Views[name] || Views.feed;
     currentView = fn;
 
+    if (window.Reels) Reels.stop();
     const out = fn(arg ? decodeURIComponent(arg) : undefined) || { html: '' };
     ctx = out;
+    view.classList.toggle('bleed', !!out.bleed);
     view.innerHTML = out.html;
     window.PALIcons.render(view);
+    if (typeof out.mount === 'function') out.mount();
 
     // nav highlight
     document.querySelectorAll('[data-route]').forEach(a => {
@@ -180,6 +183,60 @@
       </div>`);
   };
 
+  /* ---------------------------------------------------------- video export */
+  let lastVideoURL = null;
+
+  async function videoModal(id) {
+    const idea = UI.findIdea(id);
+    if (!idea) return;
+    const secs = Math.round(Reels.beats(idea).reduce((s, b) => s + b.seconds, 0));
+
+    UI.modal(`<h2>Export as video</h2>
+      <p class="muted">Rendered here in your browser — nothing is uploaded anywhere.
+      Vertical 1080&times;1920, about ${secs}s, ready to post to TikTok, Reels or Shorts.</p>
+      <div id="rec-body">
+        <div class="rec-bar"><i id="rec-progress"></i></div>
+        <p class="muted" id="rec-status" style="font-size:13px; margin-top:10px">Rendering frames&hellip;</p>
+      </div>
+      <div class="modal-foot"><button class="btn btn-ghost" data-act="close">Cancel</button></div>`);
+
+    // pause playback so the recorder gets the animation frames
+    const wasPlaying = Reels.active && !Reels.active.paused;
+    if (wasPlaying) Reels.togglePause();
+
+    try {
+      const out = await Reels.record(idea, p => {
+        const bar = document.getElementById('rec-progress');
+        const st = document.getElementById('rec-status');
+        if (bar) bar.style.width = (p * 100).toFixed(0) + '%';
+        if (st) st.textContent = p < 1 ? 'Rendering frames… ' + Math.round(p * 100) + '%' : 'Encoding…';
+      });
+
+      if (lastVideoURL) URL.revokeObjectURL(lastVideoURL);
+      lastVideoURL = URL.createObjectURL(out.blob);
+      const name = 'stacks-' + idea.id + '.' + out.ext;
+      const size = (out.blob.size / 1048576).toFixed(1);
+
+      const body = document.getElementById('rec-body');
+      if (body) {
+        body.innerHTML =
+          `<video class="rec-shot" src="${lastVideoURL}" controls autoplay loop playsinline muted></video>
+           <p class="muted" style="text-align:center; font-size:13px">${out.ext.toUpperCase()} · ${size} MB · ${Math.round(out.seconds)}s</p>`;
+        const foot = body.parentElement.querySelector('.modal-foot');
+        if (foot) {
+          foot.innerHTML = `<button class="btn btn-ghost" data-act="close">Close</button>
+            <a class="btn btn-primary" download="${name}" href="${lastVideoURL}">${ico('download')}Download</a>`;
+          window.PALIcons.render(foot);
+        }
+      }
+    } catch (e) {
+      const body = document.getElementById('rec-body');
+      if (body) body.innerHTML = `<p class="muted">Could not render a video: ${esc(e.message)}</p>`;
+    } finally {
+      if (wasPlaying && Reels.active && Reels.active.paused) Reels.togglePause();
+    }
+  }
+
   function collectModal(ideaId) {
     const cols = Store.state.collections;
     UI.modal(`<h2>Add to collection</h2>
@@ -233,6 +290,11 @@
       chrome();
     },
     collect(el) { collectModal(el.dataset.id || el.closest('[data-id]').dataset.id); },
+    'reel-sound'() {
+      Reels.setSound(!Reels.sound);
+      UI.toast(Reels.sound ? 'Narration on' : 'Narration off');
+    },
+    'reel-video'(el) { videoModal(el.dataset.id || el.closest('[data-id]').dataset.id); },
     'toggle-collect'(el) {
       const on = Store.toggleInCollection(el.dataset.cid, el.dataset.id);
       el.classList.toggle('on', on);
@@ -275,6 +337,15 @@
   document.addEventListener('click', e => {
     if (e.target.closest('[data-close]')) { UI.closeModal(); return; }
 
+    // reels tap zones: left = previous beat, middle = pause, right = next beat
+    const tap = e.target.closest('[data-tap]');
+    if (tap) {
+      const z = tap.dataset.tap;
+      if (z === 'toggle') Reels.togglePause();
+      else Reels.step(z === 'next' ? 1 : -1);
+      return;
+    }
+
     const el = e.target.closest('[data-act]');
     if (!el) return;
     const act = el.dataset.act;
@@ -299,6 +370,19 @@
   document.getElementById('btn-new').addEventListener('click', () => App.newIdeaModal());
   document.getElementById('btn-menu').addEventListener('click', () =>
     document.querySelector('.sidebar').classList.toggle('open'));
+
+  /** Re-sync a reel's action rail after a keyboard toggle. */
+  function refreshRail(id) {
+    document.querySelectorAll(`.reel[data-id="${CSS.escape(id)}"] .reel-rail button`).forEach(b => {
+      const a = b.dataset.act;
+      if (a === 'save') b.classList.toggle('on', Store.isSaved(id));
+      if (a === 'like') b.classList.toggle('on', Store.isLiked(id));
+      if (a === 'srs') b.classList.toggle('on', Store.inReview(id));
+    });
+  }
+
+  // reels mark ideas as read while you watch — keep the streak/goal in sync
+  document.addEventListener('pal:progress', () => chrome());
 
   /* -------------------------------------------------------------- search */
   const search = document.getElementById('search');
@@ -337,6 +421,33 @@
       else if (e.key === 'l' && idea) { Store.toggleLike(idea.id); paintReader(); }
       else if (e.key === 'r' && idea) { SRS.toggle(idea.id); paintReader(); UI.toast('Review updated'); }
       return;
+    }
+
+    // reels feed: arrows move between shorts, space pauses, ← → step beats
+    const scroller = document.getElementById('reels-scroll');
+    if (scroller) {
+      const cur = Reels.active ? Reels.active.el : scroller.querySelector('.reel');
+      if (e.key === 'j' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (cur && cur.nextElementSibling) cur.nextElementSibling.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+      if (e.key === 'k' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (cur && cur.previousElementSibling) cur.previousElementSibling.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+      if (e.key === ' ') { e.preventDefault(); Reels.togglePause(); return; }
+      if (e.key === 'ArrowRight') { Reels.step(1); return; }
+      if (e.key === 'ArrowLeft') { Reels.step(-1); return; }
+      if (e.key === 'm') { Reels.setSound(!Reels.sound); return; }
+      if (Reels.active) {
+        const id = Reels.active.idea.id;
+        if (e.key === 's') { Store.toggleSave(id); refreshRail(id); UI.toast('Stash updated'); return; }
+        if (e.key === 'l') { Store.toggleLike(id); refreshRail(id); return; }
+        if (e.key === 'r') { SRS.toggle(id); refreshRail(id); chrome(); UI.toast('Review updated'); return; }
+        if (e.key === 'v') { videoModal(id); return; }
+      }
     }
 
     if (parseHash().name === 'review') {

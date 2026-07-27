@@ -20,6 +20,7 @@
     activity:  {},   // 'YYYY-MM-DD' -> { read, reviewed }
     dailyGoal: 7,
     theme:     'dark',
+    feedMode:  'reels',   // 'reels' (default) or 'list'
     lastSeen:  null,
     feedSeed:  Math.floor(Math.random() * 1e9)
   });

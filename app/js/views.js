@@ -25,18 +25,41 @@
     return unread.concat(read);
   }
 
+  function filterChips() {
+    return ['<button class="chip' + (feedFilter === 'all' ? ' on' : '') +
+            '" data-act="filter" data-topic="all">Everything</button>']
+      .concat(PAL.topics.map(t =>
+        `<button class="chip${feedFilter === t.id ? ' on' : ''}" data-act="filter" data-topic="${t.id}">${t.emoji} ${esc(t.name)}</button>`))
+      .join('');
+  }
+
+  /* ---- reels: one full-screen idea at a time, played like a short ------- */
+  function feedReels() {
+    const pool = feedPool();
+    return {
+      html: `<div class="reels" id="reels-scroll"></div>
+        <div class="reels-head">
+          <div class="chips scroll">${filterChips()}</div>
+          <button class="chip" data-act="mode" data-mode="list" title="Switch to list view">${ico('grid')}</button>
+        </div>`,
+      bleed: true,
+      ids: pool.map(i => i.id),
+      mount() {
+        const el = document.getElementById('reels-scroll');
+        if (el) Reels.mount(el, pool);
+      }
+    };
+  }
+
   V.feed = function () {
+    if (Store.state.feedMode !== 'list') return feedReels();
+
     const goal = Store.state.dailyGoal;
     const done = Store.todayCount();
     const pool = feedPool();
     const shown = pool.slice(0, feedLimit);
     const dueN = SRS.counts().due;
-
-    const chips = ['<button class="chip' + (feedFilter === 'all' ? ' on' : '') +
-                   '" data-act="filter" data-topic="all">Everything</button>']
-      .concat(PAL.topics.map(t =>
-        `<button class="chip${feedFilter === t.id ? ' on' : ''}" data-act="filter" data-topic="${t.id}">${t.emoji} ${esc(t.name)}</button>`))
-      .join('');
+    const chips = filterChips();
 
     return {
       html: `<div class="wrap">
@@ -47,7 +70,8 @@
               <span>${done >= goal ? 'Daily goal met — keep going.' : 'ideas read or reviewed'}</span></div>
           </div>
           ${dueN ? `<a class="btn btn-accent" href="#/review">${ico('brain')}${dueN} due for review</a>` : ''}
-          <button class="btn btn-ghost" data-act="shuffle" style="margin-left:auto">${ico('shuffle')}Reshuffle</button>
+          <button class="btn btn-ghost" data-act="mode" data-mode="reels" style="margin-left:auto">${ico('reels')}Reels</button>
+          <button class="btn btn-ghost" data-act="shuffle">${ico('shuffle')}Reshuffle</button>
         </div>
 
         <div class="chips scroll" style="margin-bottom:22px">${chips}</div>
@@ -67,6 +91,11 @@
   V.feed.actions = {
     filter(el) { feedFilter = el.dataset.topic; feedLimit = 12; App.render(); },
     more() { feedLimit += 12; App.render(); },
+    mode(el) {
+      Store.state.feedMode = el.dataset.mode;
+      Store.save(); App.render();
+      UI.toast(el.dataset.mode === 'reels' ? 'Reels view' : 'List view');
+    },
     shuffle() {
       Store.state.feedSeed = Math.floor(Math.random() * 1e9);
       Store.save(); feedLimit = 12; App.render(); UI.toast('Feed reshuffled');

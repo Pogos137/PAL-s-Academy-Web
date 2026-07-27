@@ -67,7 +67,7 @@ button,input,select,textarea{font:inherit; color:inherit}
 /* ================= layout ================= */
 .app{display:grid; grid-template-columns:var(--sidebar-w) 1fr; min-height:100dvh}
 .main{min-width:0; display:flex; flex-direction:column}
-.view{flex:1; padding:26px 30px 90px; min-width:0}
+.view{flex:1; padding:26px 30px 90px; min-width:0; position:relative}
 .wrap{max-width:1040px; margin:0 auto}
 .read{max-width:var(--max-read); margin:0 auto}
 

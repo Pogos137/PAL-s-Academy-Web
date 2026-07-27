@@ -29,7 +29,13 @@
     download:`<path d="M12 4v11M7 11l5 5 5-5M4 20h16" ${P}/>`,
     upload:  `<path d="M12 20V9M7 13l5-5 5 5M4 4h16" ${P}/>`,
     shuffle: `<path d="M4 6h4l8 12h4M4 18h4l2-3M16 6h4M18 4l2 2-2 2M18 16l2 2-2 2" ${P}/>`,
-    clock:   `<circle cx="12" cy="12" r="9" ${P}/><path d="M12 7v5l3.2 2" ${P}/>`
+    clock:   `<circle cx="12" cy="12" r="9" ${P}/><path d="M12 7v5l3.2 2" ${P}/>`,
+    film:    `<rect x="3" y="5" width="18" height="14" rx="2.5" ${P}/><path d="M8 5v14M16 5v14M3 12h18" ${P}/>`,
+    sound:   `<path d="M4 9v6h3.5L12 19V5L7.5 9H4z" ${P}/><path d="M16 9.2a4 4 0 0 1 0 5.6" ${P}/><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11" ${P}/>`,
+    mute:    `<path d="M4 9v6h3.5L12 19V5L7.5 9H4z" ${P}/><path d="M16.5 10l4 4M20.5 10l-4 4" ${P}/>`,
+    play:    `<path d="M8 5.5v13l11-6.5z" ${P}/>`,
+    grid:    `<rect x="3.5" y="3.5" width="7" height="7" rx="1.6" ${P}/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6" ${P}/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6" ${P}/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6" ${P}/>`,
+    reels:   `<rect x="4" y="3" width="16" height="18" rx="3" ${P}/><path d="M10 9.5v5l4.5-2.5z" ${P}/>`
   };
 
   window.PALIcons = {

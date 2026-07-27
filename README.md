@@ -42,10 +42,36 @@ backup* restores it. Do that occasionally.
 
 ## What's in it
 
-### Feed
-A scrolling stack of ideas, filterable by realm. Unread surfaces first, and the order is
-stable within a day so you can leave and come back. Reading counts toward a daily goal and
-a streak.
+### Feed — reels
+The default feed is a **full-screen vertical short-form player**, the TikTok / Reels format.
+One idea per screen, swipe up for the next, snap scrolling, right-hand action rail.
+
+Each idea is decomposed automatically into timed **beats** — hook, then the body a sentence
+at a time, then the clinical correlate, the mnemonic, a quick-check question, and the source.
+Beats advance on a reading-pace timer with segmented story bars along the top, so it plays
+like a captioned short rather than sitting there as text.
+
+- **Tap left / middle / right** — previous beat, pause, next beat
+- **Swipe or arrow up/down** — previous / next idea
+- **Narration** — optional voiceover using the browser's built-in speech synthesis (offline,
+  no API, no key). Off by default.
+- Watching an idea for a couple of seconds marks it read, so the daily goal and streak fill
+  as you scroll.
+
+Unread surfaces first, order is stable within a day, and a **list view** toggle is there for
+when you want to scan rather than watch.
+
+### Video export
+The film button on any reel renders it to a **real video file, in your browser** — canvas
+frames captured through `MediaRecorder`, nothing uploaded, no service involved.
+
+- Vertical **1080×1920**, ready for TikTok, Reels or Shorts
+- **MP4/H.264** where the browser supports it (Chromium does), WebM/VP9 otherwise
+- Typically 20–40s and 5–15 MB depending on the length of the idea
+- The same beat script drives both the player and the recorder, so the export is what you
+  watched
+
+Preview it in the dialog, then download.
 
 ### Explore
 Browse by realm → source → idea, or search the whole library from the top bar.
@@ -96,9 +122,12 @@ sits beside the library — searchable, savable and reviewable on the same footi
 | --- | --- |
 | `/` | focus search |
 | `t` | toggle dark / light |
-| `j` `k` / `↑` `↓` / `space` | next / previous idea in the reader |
-| `s` `l` `r` | save / like / add to review (in the reader) |
-| `space` | reveal answer (in review) |
+| `j` `k` / `↑` `↓` | next / previous idea (reels and reader) |
+| `space` | pause / resume a reel · reveal the answer in review |
+| `←` `→` | step back / forward one beat in a reel |
+| `s` `l` `r` | save / like / add to review |
+| `v` | export the current reel as a video |
+| `m` | toggle narration |
 | `1` `2` `3` `4` | grade Again / Hard / Good / Easy |
 | `Esc` | close reader or dialog |
 
@@ -109,11 +138,13 @@ sits beside the library — searchable, savable and reviewable on the same footi
 ```
 index.html              app shell
 app/css/app.css         design system — PAL's Academy tokens, dark + light
+app/css/reels.css       full-screen short-form player
 app/js/library.js       realms, sources, paths, the PAL.add() registry
 app/js/store.js         localStorage state, export/import
 app/js/srs.js           spaced repetition scheduler
 app/js/icons.js         inline SVG set
 app/js/ui.js            shared render helpers
+app/js/reels.js         beat engine, reels player, canvas video recorder
 app/js/views.js         one function per route
 app/js/app.js           router, events, reader overlay, shortcuts
 app/data/references.js  reference basis per source + verified primary citations
