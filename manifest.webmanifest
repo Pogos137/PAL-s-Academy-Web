@@ -1,0 +1,22 @@
+{
+  "name": "Stacks — PAL's Academy",
+  "short_name": "Stacks",
+  "description": "A private knowledge app: 928 ideas across medicine, anatomy, physiology, kinesiology and the books that cover everything else.",
+  "start_url": "./?src=homescreen",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0C110F",
+  "theme_color": "#0C110F",
+  "categories": ["education", "medical", "productivity"],
+  "icons": [
+    { "src": "app/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "app/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "app/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Reels", "url": "./#/feed" },
+    { "name": "Review due", "url": "./#/review" },
+    { "name": "My Stash", "url": "./#/stash" }
+  ]
+}

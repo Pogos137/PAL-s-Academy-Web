@@ -74,7 +74,7 @@ button,input,select,textarea{font:inherit; color:inherit}
 /* ================= sidebar ================= */
 .sidebar{
   position:sticky; top:0; height:100dvh; display:flex; flex-direction:column; gap:8px;
-  padding:18px 14px; background:var(--surface); border-right:1px solid var(--border); z-index:40;
+  padding:18px 14px; padding-top:calc(18px + env(safe-area-inset-top)); background:var(--surface); border-right:1px solid var(--border); z-index:40;
 }
 .brand{display:flex; gap:10px; align-items:center; padding:6px 8px 14px}
 .brand-text strong{display:block; font-size:17px; color:var(--fg-1); letter-spacing:-.02em}
@@ -97,7 +97,7 @@ button,input,select,textarea{font:inherit; color:inherit}
 /* ================= topbar ================= */
 .topbar{
   position:sticky; top:0; z-index:30; display:flex; align-items:center; gap:12px;
-  padding:12px 30px; background:color-mix(in srgb, var(--bg) 86%, transparent);
+  padding:12px 30px; padding-top:calc(12px + env(safe-area-inset-top)); background:color-mix(in srgb, var(--bg) 86%, transparent);
   backdrop-filter:saturate(1.4) blur(14px); border-bottom:1px solid var(--divider);
 }
 .search{position:relative; flex:1; max-width:520px; display:flex; align-items:center}
@@ -329,7 +329,7 @@ button,input,select,textarea{font:inherit; color:inherit}
   .sidebar.open{transform:none}
   .only-mobile{display:inline-flex}
   .view{padding:20px 16px 100px}
-  .topbar{padding:10px 14px}
+  .topbar{padding:10px 14px; padding-top:calc(10px + env(safe-area-inset-top))}
   .search kbd{display:none}
   .streak{padding:4px 10px; font-size:13px}
   .page-title{font-size:30px}

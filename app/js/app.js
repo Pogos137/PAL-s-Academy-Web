@@ -384,6 +384,21 @@
   // reels mark ideas as read while you watch — keep the streak/goal in sync
   document.addEventListener('pal:progress', () => chrome());
 
+  /**
+   * Measure the app chrome so reels can be exactly one viewport tall.
+   * Hard-coding a height breaks in standalone/home-screen mode, where the
+   * notch inset changes the topbar, and when the browser toolbar collapses.
+   */
+  function syncChrome() {
+    const root = document.documentElement;
+    const tb = document.querySelector('.topbar');
+    const bn = document.querySelector('.botnav');
+    root.style.setProperty('--topbar-h', Math.round(tb ? tb.getBoundingClientRect().height : 59) + 'px');
+    root.style.setProperty('--botnav-h', Math.round(bn ? bn.getBoundingClientRect().height : 0) + 'px');
+  }
+  window.addEventListener('resize', syncChrome);
+  window.addEventListener('orientationchange', () => setTimeout(syncChrome, 250));
+
   /* -------------------------------------------------------------- search */
   const search = document.getElementById('search');
   let searchTimer = null;
@@ -477,7 +492,10 @@
   window.PALIcons.render(document.body);
 
   if (!location.hash) location.hash = '#/feed';
+  syncChrome();
   App.render();
+  // webfonts landing can change the topbar height by a pixel or two
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncChrome);
 
   window.App = App;
 

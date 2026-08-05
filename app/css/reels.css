@@ -5,7 +5,8 @@
 .view.bleed { padding: 0; }
 
 .reels {
-  height: calc(100dvh - 59px);          /* viewport minus the topbar */
+  /* topbar/bottom-nav heights are measured at runtime — see syncChrome() in app.js */
+  height: calc(100dvh - var(--topbar-h, 59px) - var(--botnav-h, 0px));
   overflow-y: scroll;
   overflow-x: hidden;
   scroll-snap-type: y mandatory;
@@ -177,12 +178,11 @@
 .rec-bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .2s linear; }
 
 @media (max-width: 860px) {
-  .reels { height: calc(100dvh - 53px); }
-  .reel-stage { padding: 74px 68px 190px 20px; }
-  .reel-meta { right: 68px; padding: 0 20px 84px; }
-  .reel-rail { bottom: 82px; right: 4px; }
+  .reel-stage { padding: 74px 68px 120px 20px; }
+  .reel-meta { right: 68px; padding: 0 20px 20px; }
+  .reel-rail { bottom: 20px; right: 4px; }
   .reels-head { padding: 28px 62px 0 16px; }
-  .reel-hint { bottom: 158px; }
+  .reel-hint { bottom: 96px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .reel-bg::before, .reel-bg::after { animation: none; }
